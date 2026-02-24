@@ -21,7 +21,7 @@ jobs:
         setup-command: ''
         command: make test try=LLStack
         timeout: 10
-        max-score: 1
+        max-score: 10
     - name: top
       id: top
       uses: classroom-resources/autograding-command-grader@v1
@@ -30,7 +30,7 @@ jobs:
         setup-command: ''
         command: make test try=top
         timeout: 10
-        max-score: 1
+        max-score: 10
     - name: size
       id: size
       uses: classroom-resources/autograding-command-grader@v1
@@ -39,7 +39,7 @@ jobs:
         setup-command: ''
         command: make test try=size
         timeout: 10
-        max-score: 1
+        max-score: 10
     - name: push
       id: push
       uses: classroom-resources/autograding-command-grader@v1
@@ -48,7 +48,7 @@ jobs:
         setup-command: ''
         command: make test try=push
         timeout: 10
-        max-score: 1
+        max-score: 20
     - name: pop
       id: pop
       uses: classroom-resources/autograding-command-grader@v1
@@ -57,7 +57,16 @@ jobs:
         setup-command: ''
         command: make test try=pop
         timeout: 10
-        max-score: 1
+        max-score: 20
+    - name: removeAll
+      id: removeall
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: removeAll
+        setup-command: ''
+        command: make test try=removeAll
+        timeout: 10
+        max-score: 30
     - name: Autograding Reporter
       uses: classroom-resources/autograding-grading-reporter@v1
       env:
@@ -66,5 +75,6 @@ jobs:
         SIZE_RESULTS: "${{steps.size.outputs.result}}"
         PUSH_RESULTS: "${{steps.push.outputs.result}}"
         POP_RESULTS: "${{steps.pop.outputs.result}}"
+        REMOVEALL_RESULTS: "${{steps.removeall.outputs.result}}"
       with:
-        runners: llstack,top,size,push,pop
+        runners: llstack,top,size,push,pop,removeall
