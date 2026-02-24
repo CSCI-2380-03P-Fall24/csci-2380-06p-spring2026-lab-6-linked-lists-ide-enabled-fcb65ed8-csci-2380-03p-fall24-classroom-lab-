@@ -1,0 +1,70 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: LLStack
+      id: llstack
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: LLStack
+        setup-command: ''
+        command: make test try=LLStack
+        timeout: 10
+        max-score: 1
+    - name: top
+      id: top
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: top
+        setup-command: ''
+        command: make test try=top
+        timeout: 10
+        max-score: 1
+    - name: size
+      id: size
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: size
+        setup-command: ''
+        command: make test try=size
+        timeout: 10
+        max-score: 1
+    - name: push
+      id: push
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: push
+        setup-command: ''
+        command: make test try=push
+        timeout: 10
+        max-score: 1
+    - name: pop
+      id: pop
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: pop
+        setup-command: ''
+        command: make test try=pop
+        timeout: 10
+        max-score: 1
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        LLSTACK_RESULTS: "${{steps.llstack.outputs.result}}"
+        TOP_RESULTS: "${{steps.top.outputs.result}}"
+        SIZE_RESULTS: "${{steps.size.outputs.result}}"
+        PUSH_RESULTS: "${{steps.push.outputs.result}}"
+        POP_RESULTS: "${{steps.pop.outputs.result}}"
+      with:
+        runners: llstack,top,size,push,pop
